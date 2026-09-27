@@ -1,38 +1,54 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Bell, CircleHelp, Clock3, LogOut, Menu, Search, ShieldCheck, Trophy, UserRound, Users, X } from 'lucide-react'
-
-const matches = [
-  { time: '09:30', home: 'HC Rotterdam', away: 'Kampong', score: '3 : 2', status: 'LIVE', field: 'Field 1' },
-  { time: '11:15', home: 'Den Bosch', away: 'Bloemendaal', score: '— : —', status: 'UPCOMING', field: 'Field 2' },
-  { time: '13:00', home: 'Pinoké', away: 'Amsterdam', score: '— : —', status: 'UPCOMING', field: 'Field 1' },
-  { time: '15:30', home: 'HGC', away: 'Oranje-Rood', score: '1 : 1', status: 'FINISHED', field: 'Field 3' },
-]
+import { Bell, CalendarDays, ChevronDown, ChevronRight, CircleHelp, ClipboardList, FileText, LogOut, Menu, Search, Settings, Shield, Trophy, Users, X } from 'lucide-react'
 
 const competitions = [
-  { name: 'Euro Hockey League', meta: 'International · 24 teams', dates: 'Oct 7–10, 2026', place: 'Barcelona', type: 'Senior Men', matches: '48', state: 'In progress' },
-  { name: 'Hoofdklasse Men', meta: 'National league · 12 teams', dates: 'Oct 7–10, 2026', place: 'Amsterdam', type: 'Senior Men', matches: '132', state: 'In progress' },
-  { name: 'EHL Women 2026', meta: 'International · 16 teams', dates: 'Oct 9–11, 2026', place: 'Barcelona', type: 'Senior Women', matches: '32', state: 'Upcoming' },
+  { code: 'UZB-2026-01', name: 'O‘zbekiston chempionati — erkaklar', dates: '12–18 may 2026', venue: 'Toshkent, Milliy stadion', status: 'Faol', teams: '8 jamoa', matches: '28 ta o‘yin' },
+  { code: 'UZB-2026-02', name: 'O‘zbekiston kubogi — ayollar', dates: '04–09 iyun 2026', venue: 'Samarqand sport majmuasi', status: 'Ro‘yxatdan o‘tish', teams: '6 jamoa', matches: '15 ta o‘yin' },
+  { code: 'UZB-2026-03', name: 'Yoshlar ligasi U-18', dates: '22–27 iyul 2026', venue: 'Toshkent viloyati', status: 'Rejalashtirilgan', teams: '10 jamoa', matches: '45 ta o‘yin' },
+]
+
+const matches = [
+  { date: '18 MAY', time: '16:00', home: 'Toshkent Dinamo', away: 'Samarqand HC', comp: 'O‘zbekiston chempionati', place: 'Milliy stadion · 1-maydon', state: 'Kutilmoqda' },
+  { date: '19 MAY', time: '14:30', home: 'Navbahor', away: 'Andijon HC', comp: 'O‘zbekiston chempionati', place: 'Milliy stadion · 2-maydon', state: 'Kutilmoqda' },
+  { date: '20 MAY', time: '17:00', home: 'Bunyodkor', away: 'Farg‘ona HC', comp: 'O‘zbekiston chempionati', place: 'Milliy stadion · 1-maydon', state: 'Kutilmoqda' },
 ]
 
 export default function Home() {
   const [query, setQuery] = useState('')
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState('In progress')
-  const filteredMatches = useMemo(() => matches.filter((match) => Object.values(match).join(' ').toLowerCase().includes(query.toLowerCase())), [query])
-  const visibleCompetitions = competitions.filter((competition) => activeTab === 'Previous' || competition.state === activeTab || (activeTab === 'In progress' && competition.state === 'In progress'))
+  const [navOpen, setNavOpen] = useState(false)
+  const filtered = useMemo(() => competitions.filter((item) => Object.values(item).join(' ').toLowerCase().includes(query.toLowerCase())), [query])
 
-  return (
-    <div className="portal-shell">
-      <header className="topbar"><a className="brand-small">Altius<span>rt</span></a><div className="top-actions"><span className="user-link"><UserRound /> Ahmadov Ozodbek</span><span className="top-divider" /><button className="plain-action"><ShieldCheck /> Admin</button><button className="plain-action"><Bell /> <span className="desktop-only">Notifications</span></button><button className="plain-action"><LogOut /> <span className="desktop-only">Logout</span></button><button className="plain-action"><CircleHelp /> <span className="desktop-only">Help</span></button><span className="help-count">0/4</span></div></header>
-      <div className="brandbar"><button className="mobile-menu" aria-label="Open navigation" onClick={() => setMenuOpen(true)}><Menu /></button><div className="fih-mark">FI<span>H</span></div><nav className={menuOpen ? 'main-nav open' : 'main-nav'}><button className="selected" onClick={() => setMenuOpen(false)}>Dashboard</button><button onClick={() => setMenuOpen(false)}>Teams</button><button onClick={() => setMenuOpen(false)}>Competitions</button><button onClick={() => setMenuOpen(false)}>Matches</button><button onClick={() => setMenuOpen(false)}>Score list</button><button className="nav-close" onClick={() => setMenuOpen(false)}><X /></button></nav></div>
-      <main>
-        <section className="hero"><div><span className="eyebrow">OʻZBEKISTON CHIM USTIDA XOKEY FEDERATSIYASI</span><h1>Musobaqalar boshqaruvi</h1><p>Turnirlar, jamoalar, rasmiylar va uchrashuvlar natijalarini yagona tizimda boshqaring.</p></div><button className="profile-button"><UserRound /> Profilni ko‘rish</button></section>
-        <section className="quick-stats"><div><span className="stat-icon green"><Trophy /></span><div><b>8</b><small>Faol musobaqalar</small></div></div><div><span className="stat-icon violet"><Users /></span><div><b>36</b><small>Ro‘yxatdagi jamoalar</small></div></div><div><span className="stat-icon amber"><Clock3 /></span><div><b>4</b><small>Kutilayotgan ishlar</small></div></div><div><span className="stat-icon blue"><ShieldCheck /></span><div><b>6</b><small>Tayinlangan rasmiylar</small></div></div></section>
-        <div className="content-grid"><aside className="left-column"><section className="panel search-panel"><div className="panel-heading"><span>Find something</span><Search /></div><div className="search-box"><Search /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search people, teams or competitions" aria-label="Search people, teams or competitions" /></div><div className="search-hints"><span>⌘ K</span> Search across FieldFlow</div></section><section className="panel welcome-panel"><div className="panel-heading"><span>Notifications</span><b>0 unread</b></div><div className="empty-note"><Bell /><div><strong>You&apos;re all caught up</strong><small>No new notifications right now.</small></div></div></section><section className="panel role-panel"><div className="panel-heading"><span>Your access</span><a>Manage</a></div><div className="role-card"><div className="avatar">AO</div><div><strong>Technical delegate</strong><small>Full competition access</small></div><span>ACTIVE</span></div></section></aside><section className="panel competition-panel"><div className="panel-heading"><div><span>Competition listing</span><small>Track active tournaments and seasons</small></div><button>View all <span>→</span></button></div><div className="tabs">{['Previous', 'In progress', 'Upcoming'].map((tab) => <button key={tab} className={activeTab === tab ? 'active' : ''} onClick={() => setActiveTab(tab)}>{tab}</button>)}</div><div className="table-wrap"><table><thead><tr><th>Competition</th><th>Dates</th><th>Location</th><th>Type</th><th>Matches</th></tr></thead><tbody>{visibleCompetitions.map((competition) => <tr key={competition.name}><td><a>{competition.name}</a><small>{competition.meta}</small></td><td>{competition.dates}</td><td>{competition.place}</td><td>{competition.type}</td><td><b>{competition.matches}</b></td></tr>)}</tbody></table></div></section></div>
-        <section className="lower-grid"><section className="panel list-panel"><div className="panel-heading"><div><span>Score list</span><small>Match centre and results</small></div><a>View all →</a></div><div className="score-list">{filteredMatches.map((match) => <div className="score-row" key={match.time}><strong>{match.time}</strong><span className={match.status.toLowerCase()}>{match.status}</span><div><b>{match.home}</b><small>{match.field}</small></div><em>{match.score}</em><div className="away"><b>{match.away}</b></div></div>)}</div></section><section className="panel help-panel"><div className="panel-heading"><span>Need a hand?</span><CircleHelp /></div><div><strong>Explore the FieldFlow guide</strong><p>Learn how roles, permissions and score reporting work.</p><button>Open help centre <span>→</span></button></div></section></section>
-      </main><footer><span>2026 © International Hockey Federation</span><strong>Altius<span>rt</span></strong><span>Terms of Service</span></footer>
-    </div>
-  )
+  return <div className="federation-app">
+    <header className="site-header">
+      <div className="header-inner">
+        <button className="mobile-toggle" aria-label="Menyuni ochish" onClick={() => setNavOpen(true)}><Menu /></button>
+        <a className="federation-brand" href="#top"><span className="brand-mark">UZ</span><span><b>O‘zbekiston</b><small>Chim ustida xokey federatsiyasi</small></span></a>
+        <nav className={navOpen ? 'primary-nav is-open' : 'primary-nav'} aria-label="Asosiy menyu">
+          <button className="nav-active">Bosh sahifa</button><button>Musobaqalar</button><button>Uchrashuvlar</button><button>Jamoalar</button><button>Rasmiylar</button><button className="mobile-close" onClick={() => setNavOpen(false)}><X /> Yopish</button>
+        </nav>
+        <div className="header-tools"><button aria-label="Qidiruv"><Search /></button><button aria-label="Bildirishnomalar"><Bell /><i>2</i></button><button className="profile-menu"><span className="profile-initials">AO</span><span className="profile-name">Ahmadov Ozodbek</span><ChevronDown /></button></div>
+      </div>
+    </header>
+
+    <main id="top">
+      <div className="page-title"><div><p className="breadcrumb">Bosh sahifa <ChevronRight /> Boshqaruv paneli</p><h1>Federatsiya boshqaruv paneli</h1><p className="subtitle">Musobaqalar, uchrashuvlar va jamoalar faoliyatini nazorat qilish markazi.</p></div><div className="page-actions"><button className="secondary-button"><FileText /> Hisobotlar</button><button className="primary-button"><CalendarDays /> Kalendar</button></div></div>
+
+      <section className="overview-grid" aria-label="Umumiy ko‘rsatkichlar">
+        <article className="metric-card"><span className="metric-icon green"><Trophy /></span><div><small>Faol musobaqalar</small><strong>8</strong><em>+2 bu mavsumda</em></div></article>
+        <article className="metric-card"><span className="metric-icon blue"><Users /></span><div><small>Ro‘yxatdagi jamoalar</small><strong>36</strong><em>5 ta hududdan</em></div></article>
+        <article className="metric-card"><span className="metric-icon gold"><ClipboardList /></span><div><small>Jami uchrashuvlar</small><strong>124</strong><em>18 tasi yakunlangan</em></div></article>
+        <article className="metric-card"><span className="metric-icon violet"><Shield /></span><div><small>Tayinlangan rasmiylar</small><strong>42</strong><em>6 ta yangi so‘rov</em></div></article>
+      </section>
+
+      <div className="dashboard-grid">
+        <section className="card competitions-card"><div className="card-header"><div><p className="overline">ASOSIY REYESTR</p><h2>Musobaqalar</h2><p className="card-desc">Federatsiya kalendaridagi musobaqalar</p></div><button className="text-button">Barchasini ko‘rish <ChevronRight /></button></div><div className="filter-bar"><div className="search-field"><Search /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Musobaqa nomi yoki kodi bo‘yicha qidirish" aria-label="Musobaqa qidirish" /></div><button className="filter-button">Barchasi <ChevronDown /></button></div><div className="competition-list">{filtered.map((item) => <article className="competition-row" key={item.code}><div className="competition-code">{item.code}</div><div className="competition-info"><a>{item.name}</a><span>{item.dates} <b>·</b> {item.venue}</span></div><div className="competition-meta"><span className={'status status-' + item.status.replaceAll(' ', '-').toLowerCase()}>{item.status}</span><small>{item.teams} &nbsp; {item.matches}</small></div><ChevronRight className="row-arrow" /></article>)}</div></section>
+        <aside className="side-column"><section className="card activity-card"><div className="card-header compact"><div><p className="overline">TIZIM HOLATI</p><h2>So‘nggi faoliyat</h2></div><button className="more-button">•••</button></div><div className="activity-list"><div><span className="activity-dot green-dot" /><p><b>Yangi uchrashuv tasdiqlandi</b><small>O‘zbekiston chempionati · 14 daqiqa avval</small></p></div><div><span className="activity-dot blue-dot" /><p><b>Jamoa ro‘yxatdan o‘tdi</b><small>Samarqand Hockey Club · 2 soat avval</small></p></div><div><span className="activity-dot gold-dot" /><p><b>Rasmiy tayinlandi</b><small>U-18 Yoshlar ligasi · Kecha</small></p></div></div><button className="full-link">Faoliyat jurnalini ko‘rish <ChevronRight /></button></section><section className="card access-card"><div className="card-header compact"><div><p className="overline">SIZNING ROLINGIZ</p><h2>Technical delegate</h2></div><Settings /></div><p>Musobaqalar, uchrashuvlar va rasmiylar bo‘yicha to‘liq boshqaruv huquqi.</p><button className="outline-button">Profil va huquqlar</button></section></aside>
+      </div>
+
+      <section className="card matches-card"><div className="card-header"><div><p className="overline">MUSOBAQA KALENDARI</p><h2>Keyingi uchrashuvlar</h2><p className="card-desc">Rejalashtirilgan uchrashuvlar ro‘yxati</p></div><button className="text-button">Uchrashuvlar markazi <ChevronRight /></button></div><div className="match-table"><div className="match-head"><span>SANA</span><span>UCHRASHUV</span><span>MUSOBAQA</span><span>O‘TKAZILISH JOYI</span><span>HOLAT</span></div>{matches.map((match) => <div className="match-row" key={match.date + match.time}><div><b>{match.date}</b><small>{match.time}</small></div><div className="teams"><strong>{match.home}</strong><span>vs</span><strong>{match.away}</strong></div><span>{match.comp}</span><span>{match.place}</span><span className="match-state">{match.state}</span></div>)}</div></section>
+    </main>
+    <footer><div><span className="footer-mark">UZ</span><span>O‘zbekiston Chim Ustida Xokey Federatsiyasi</span></div><span>2026 · Ichki boshqaruv portali</span><button><CircleHelp /> Yordam markazi</button><button><LogOut /> Chiqish</button></footer>
+  </div>
 }
